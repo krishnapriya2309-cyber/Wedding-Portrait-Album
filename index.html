@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Portrait Album</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Wedding Portrait Album</h1>
+
+  <button id="cameraBtn">Take Photo</button>
+  <input type="file" id="fileInput" multiple accept="image/*">
+  <div id="preview"></div>
+
+  <textarea id="textMsg" placeholder="Leave a message for the couple"></textarea>
+  <button id="recordBtn">Record Voice</button>
+  <button id="submitBtn">Submit</button>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+
