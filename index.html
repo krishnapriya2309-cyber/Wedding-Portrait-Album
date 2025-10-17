@@ -10,8 +10,15 @@
   <h1>Wedding Portrait Album 💖</h1>
   <p>Upload or capture your favorite moment for the Bride & Groom!</p>
 
+  <!-- File upload -->
   <input type="file" id="fileInput" accept="image/*">
+  <input type="text" id="guestName" placeholder="Your Name">
+  <textarea id="guestMessage" placeholder="Your message for the bride & groom"></textarea>
   <button id="submitBtn">Upload Photo</button>
+
+  <!-- Gallery -->
+  <h2>Photo Gallery</h2>
+  <div id="gallery"></div>
 
   <script type="module" src="firebase-config.js"></script>
   <script type="module" src="script.js"></script>
