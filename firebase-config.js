@@ -7,7 +7,7 @@ const firebaseConfig = {
   authDomain: "weddingportraitalbum.firebaseapp.com",
   databaseURL: "https://weddingportraitalbum-default-rtdb.firebaseio.com",
   projectId: "weddingportraitalbum",
-  storageBucket: "weddingportraitalbum.firebasestorage.app",
+  storageBucket: "weddingportraitalbum.appspot.com",
   messagingSenderId: "292563754821",
   appId: "1:292563754821:web:42d167f3e8deb3159e282c"
 };
