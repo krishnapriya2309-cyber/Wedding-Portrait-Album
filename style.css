@@ -79,4 +79,32 @@ label {
   font-size: 14px;
   margin-bottom: 15px;
 }
+.voice-section {
+  margin-top: 30px;
+  background: #fff0f6;
+  padding: 20px;
+  border-radius: 12px;
+  display: inline-block;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.voice-section h3 {
+  color: #d63384;
+  margin-bottom: 10px;
+}
+
+.voice-section button {
+  background-color: #d63384;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.voice-section button:hover {
+  background-color: #b0256b;
+}
 
