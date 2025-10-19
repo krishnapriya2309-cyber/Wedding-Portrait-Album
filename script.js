@@ -135,4 +135,30 @@ stopBtn.addEventListener("click", async () => {
     stopBtn.disabled = true;
   };
 });
+/* ------------------ 👰🤵 Private Voice Gallery ------------------ */
+async function loadVoiceGallery() {
+  const voiceGallery = document.getElementById("voiceGallery");
+  voiceGallery.innerHTML = "";
+
+  const q = query(collection(db, "voiceMessages"), orderBy("timestamp", "desc"));
+  const snapshot = await getDocs(q);
+
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    if (data.private) { // show only private messages
+      const div = document.createElement("div");
+      div.classList.add("voice-card");
+      div.innerHTML = `
+        <p><strong>${data.name}</strong></p>
+        <audio controls src="${data.audioUrl}"></audio>
+      `;
+      voiceGallery.appendChild(div);
+    }
+  });
+}
+
+// Call it on page load
+loadVoiceGallery();
+// After uploading voice message successfully
+loadVoiceGallery();
 
