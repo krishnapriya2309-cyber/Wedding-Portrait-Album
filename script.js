@@ -16,7 +16,6 @@ const guestMessageInput = document.getElementById("guestMessage");
 const privateMessage = document.getElementById("privateMessage");
 const submitBtn = document.getElementById("submitBtn");
 const gallery = document.getElementById("gallery");
-
 const startBtn = document.getElementById("startRecording");
 const stopBtn = document.getElementById("stopRecording");
 const audioPlayback = document.getElementById("audioPlayback");
@@ -63,7 +62,7 @@ submitBtn.addEventListener("click", async () => {
     loadGallery();
   } catch (error) {
     console.error(error);
-    alert("❌ Upload failed. Check the console for details.");
+    alert("❌ Upload failed. Check console for details.");
   }
 });
 
@@ -90,24 +89,25 @@ async function loadGallery() {
 
 loadGallery();
 
-/* ------------------ 🎤 Voice Message (Private) ------------------ */
-startBtn?.addEventListener("click", async () => {
+/* ------------------ 🎤 Voice Message (Private Upload) ------------------ */
+startBtn.addEventListener("click", async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorder = new MediaRecorder(stream);
     audioChunks = [];
+
     mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
     mediaRecorder.start();
 
     startBtn.disabled = true;
     stopBtn.disabled = false;
   } catch (err) {
-    alert("🎤 Microphone access denied!");
+    alert("🎤 Please allow microphone access!");
     console.error(err);
   }
 });
 
-stopBtn?.addEventListener("click", async () => {
+stopBtn.addEventListener("click", async () => {
   if (!mediaRecorder) return;
   mediaRecorder.stop();
 
@@ -115,12 +115,12 @@ stopBtn?.addEventListener("click", async () => {
     const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
     const audioFile = new File([audioBlob], `voice_${Date.now()}.webm`, { type: "audio/webm" });
 
-    // Upload voice message to Firebase Storage
+    // Upload to Firebase Storage
     const storageRef = ref(storage, `voice/${audioFile.name}`);
     await uploadBytes(storageRef, audioFile);
     const audioUrl = await getDownloadURL(storageRef);
 
-    // Save metadata to Firestore
+    // Save voice message data
     const name = guestNameInput.value.trim() || "Anonymous";
     await addDoc(collection(db, "voiceMessages"), {
       name,
@@ -130,9 +130,9 @@ stopBtn?.addEventListener("click", async () => {
     });
 
     audioPlayback.src = audioUrl;
+    alert("✅ Voice message uploaded successfully!");
     startBtn.disabled = false;
     stopBtn.disabled = true;
-    alert("✅ Voice message uploaded!");
   };
 });
 
