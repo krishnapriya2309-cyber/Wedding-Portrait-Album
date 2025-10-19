@@ -19,6 +19,7 @@ const gallery = document.getElementById("gallery");
 const startBtn = document.getElementById("startRecording");
 const stopBtn = document.getElementById("stopRecording");
 const audioPlayback = document.getElementById("audioPlayback");
+const voiceGallery = document.getElementById("voiceGallery");
 
 let mediaRecorder;
 let audioChunks = [];
@@ -36,12 +37,10 @@ submitBtn.addEventListener("click", async () => {
   }
 
   try {
-    // Upload image to Storage
     const fileRef = ref(storage, `wedding_photos/${Date.now()}_${file.name}`);
     await uploadBytes(fileRef, file);
     const imageUrl = await getDownloadURL(fileRef);
 
-    // Save data in Firestore
     await addDoc(collection(db, "photos"), {
       name,
       message,
@@ -52,13 +51,11 @@ submitBtn.addEventListener("click", async () => {
 
     alert("✅ Your photo & message have been uploaded!");
 
-    // Reset fields
     fileInput.value = "";
     guestNameInput.value = "";
     guestMessageInput.value = "";
     privateMessage.checked = false;
 
-    // Refresh gallery
     loadGallery();
   } catch (error) {
     console.error(error);
@@ -87,8 +84,6 @@ async function loadGallery() {
   });
 }
 
-loadGallery();
-
 /* ------------------ 🎤 Voice Message (Private Upload) ------------------ */
 startBtn.addEventListener("click", async () => {
   try {
@@ -115,12 +110,10 @@ stopBtn.addEventListener("click", async () => {
     const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
     const audioFile = new File([audioBlob], `voice_${Date.now()}.webm`, { type: "audio/webm" });
 
-    // Upload to Firebase Storage
     const storageRef = ref(storage, `voice/${audioFile.name}`);
     await uploadBytes(storageRef, audioFile);
     const audioUrl = await getDownloadURL(storageRef);
 
-    // Save voice message data
     const name = guestNameInput.value.trim() || "Anonymous";
     await addDoc(collection(db, "voiceMessages"), {
       name,
@@ -133,19 +126,20 @@ stopBtn.addEventListener("click", async () => {
     alert("✅ Voice message uploaded successfully!");
     startBtn.disabled = false;
     stopBtn.disabled = true;
+
+    loadVoiceGallery();
   };
 });
-/* ------------------ 👰🤵 Private Voice Gallery ------------------ */
-async function loadVoiceGallery() {
-  const voiceGallery = document.getElementById("voiceGallery");
-  voiceGallery.innerHTML = "";
 
+/* ------------------ 👰🤵 Load Private Voice Gallery ------------------ */
+async function loadVoiceGallery() {
+  voiceGallery.innerHTML = "";
   const q = query(collection(db, "voiceMessages"), orderBy("timestamp", "desc"));
   const snapshot = await getDocs(q);
 
   snapshot.forEach((doc) => {
     const data = doc.data();
-    if (data.private) { // show only private messages
+    if (data.private) {
       const div = document.createElement("div");
       div.classList.add("voice-card");
       div.innerHTML = `
@@ -157,8 +151,6 @@ async function loadVoiceGallery() {
   });
 }
 
-// Call it on page load
+// Load galleries on page load
+loadGallery();
 loadVoiceGallery();
-// After uploading voice message successfully
-loadVoiceGallery();
-
