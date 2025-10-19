@@ -3,16 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wedding Portrait Album 💍</title>
+  <title>Priya & Pranay Wedding Portrait Album 💍</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Wedding Portrait Album 💖</h1>
-  <p>Upload or capture your favorite moment for the Bride & Groom!</p>
+  <h1>Priya & Pranay Wedding Portrait Album 💖</h1>
+  <p>Upload or capture your favorite moments for the Bride & Groom!</p>
 
-  <!-- 📸 Photo Upload -->
-  <section class="upload-section">
-    <h2>📷 Upload Your Photo</h2>
+  <!-- Upload Section -->
+  <div class="upload-section">
     <input type="file" id="fileInput" accept="image/*">
     <input type="text" id="guestName" placeholder="Your Name">
     <textarea id="guestMessage" placeholder="Your message for the bride & groom"></textarea>
@@ -20,27 +19,28 @@
       <input type="checkbox" id="privateMessage"> Private message for Bride & Groom
     </label>
     <button id="submitBtn">📸 Upload Photo</button>
-  </section>
+  </div>
 
-  <!-- 🎤 Voice Recording -->
-  <section class="voice-section">
-    <h2>🎙️ Record a Voice Message</h2>
+  <!-- Voice Recording Section -->
+  <div class="voice-section">
+    <h3>🎙️ Record a Voice Message</h3>
     <button id="startRecording">▶️ Start Recording</button>
     <button id="stopRecording" disabled>⏹️ Stop</button>
     <audio id="audioPlayback" controls></audio>
-  </section>
+  </div>
 
-  <!-- 🖼️ Photo Gallery -->
+  <!-- Public Photo Gallery -->
   <h2>💐 Photo Gallery</h2>
   <div id="gallery"></div>
 
-  <!-- 💌 Bride & Groom Private Voice Messages -->
+  <!-- Private Voice Gallery -->
   <h2>💌 Bride & Groom Voice Messages</h2>
   <div id="voiceGallery"></div>
 
-  <!-- Firebase & Script -->
+  <!-- Firebase & JS -->
   <script type="module" src="firebase-config.js"></script>
   <script type="module" src="script.js"></script>
 </body>
 </html>
+
 
