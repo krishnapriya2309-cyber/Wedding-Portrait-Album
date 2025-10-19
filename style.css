@@ -157,4 +157,40 @@ h2 {
     width: 160px;
   }
 }
+/* ---------- Private Voice Gallery ---------- */
+#voiceGallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 15px;
+  padding: 10px;
+}
+
+.voice-card {
+  background: #fff0f6;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 200px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.voice-card:hover {
+  transform: scale(1.05);
+}
+
+.voice-card p {
+  margin: 8px 0 5px 0;
+  font-weight: bold;
+  color: #b0256b;
+  font-size: 0.95rem;
+}
+
+.voice-card audio {
+  width: 100%;
+  outline: none;
+  border-radius: 8px;
+}
 
