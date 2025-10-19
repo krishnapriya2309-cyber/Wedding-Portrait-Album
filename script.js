@@ -9,17 +9,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Elements
+// DOM elements
 const fileInput = document.getElementById("fileInput");
 const guestNameInput = document.getElementById("guestName");
 const guestMessageInput = document.getElementById("guestMessage");
 const privateMessage = document.getElementById("privateMessage");
 const submitBtn = document.getElementById("submitBtn");
 const gallery = document.getElementById("gallery");
+
 const startBtn = document.getElementById("startRecording");
 const stopBtn = document.getElementById("stopRecording");
 const audioPlayback = document.getElementById("audioPlayback");
-const voiceGallery = document.getElementById("voiceGallery");
 
 let mediaRecorder;
 let audioChunks = [];
@@ -50,26 +50,25 @@ submitBtn.addEventListener("click", async () => {
     });
 
     alert("✅ Your photo & message have been uploaded!");
-
     fileInput.value = "";
     guestNameInput.value = "";
     guestMessageInput.value = "";
     privateMessage.checked = false;
 
     loadGallery();
-  } catch (error) {
-    console.error(error);
-    alert("❌ Upload failed. Check console for details.");
+  } catch (err) {
+    console.error(err);
+    alert("❌ Upload failed. Check console.");
   }
 });
 
-/* ------------------ 🖼️ Load Gallery (Public Only) ------------------ */
+/* ------------------ 🖼️ Load Photo Gallery (Public) ------------------ */
 async function loadGallery() {
   gallery.innerHTML = "";
   const q = query(collection(db, "photos"), orderBy("timestamp", "desc"));
   const snapshot = await getDocs(q);
 
-  snapshot.forEach((doc) => {
+  snapshot.forEach(doc => {
     const data = doc.data();
     if (!data.private) {
       const div = document.createElement("div");
@@ -83,17 +82,16 @@ async function loadGallery() {
     }
   });
 }
+loadGallery();
 
-/* ------------------ 🎤 Voice Message (Private Upload) ------------------ */
+/* ------------------ 🎤 Voice Recording ------------------ */
 startBtn.addEventListener("click", async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorder = new MediaRecorder(stream);
     audioChunks = [];
-
-    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
     mediaRecorder.start();
-
     startBtn.disabled = true;
     stopBtn.disabled = false;
   } catch (err) {
@@ -105,11 +103,9 @@ startBtn.addEventListener("click", async () => {
 stopBtn.addEventListener("click", async () => {
   if (!mediaRecorder) return;
   mediaRecorder.stop();
-
   mediaRecorder.onstop = async () => {
     const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
     const audioFile = new File([audioBlob], `voice_${Date.now()}.webm`, { type: "audio/webm" });
-
     const storageRef = ref(storage, `voice/${audioFile.name}`);
     await uploadBytes(storageRef, audioFile);
     const audioUrl = await getDownloadURL(storageRef);
@@ -123,7 +119,7 @@ stopBtn.addEventListener("click", async () => {
     });
 
     audioPlayback.src = audioUrl;
-    alert("✅ Voice message uploaded successfully!");
+    alert("✅ Voice message uploaded!");
     startBtn.disabled = false;
     stopBtn.disabled = true;
 
@@ -131,13 +127,14 @@ stopBtn.addEventListener("click", async () => {
   };
 });
 
-/* ------------------ 👰🤵 Load Private Voice Gallery ------------------ */
+/* ------------------ 💌 Load Private Voice Gallery ------------------ */
 async function loadVoiceGallery() {
+  const voiceGallery = document.getElementById("voiceGallery");
   voiceGallery.innerHTML = "";
   const q = query(collection(db, "voiceMessages"), orderBy("timestamp", "desc"));
   const snapshot = await getDocs(q);
 
-  snapshot.forEach((doc) => {
+  snapshot.forEach(doc => {
     const data = doc.data();
     if (data.private) {
       const div = document.createElement("div");
@@ -150,7 +147,5 @@ async function loadVoiceGallery() {
     }
   });
 }
-
-// Load galleries on page load
-loadGallery();
 loadVoiceGallery();
+
